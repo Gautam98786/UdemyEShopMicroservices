@@ -17,17 +17,25 @@ namespace Catalog.API.Products.CreateProduct
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
-            Product Products = new Product
+            try
             {
-                Name = command.Name,
-                Category = command.Category,
-                Description = command.Description,
-                ImageFile = command.ImageFile,
-                Price = command.Price,
-            };
-            session.Store(Products);
-            await session.SaveChangesAsync(cancellationToken);
-            return new CreateProductResult(Guid.NewGuid());
+                Product Products = new Product
+                {
+                    Name = command.Name,
+                    Category = command.Category,
+                    Description = command.Description,
+                    ImageFile = command.ImageFile,
+                    Price = command.Price,
+                };
+                session.Store(Products);
+                await session.SaveChangesAsync(cancellationToken);
+                return new CreateProductResult(Products.Id);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 
